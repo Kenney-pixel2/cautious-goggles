@@ -49,3 +49,5 @@ fastlane/test_output
 *.dSYM.zip
 *.dSYM
 .env
+
+OnThisDay.xcodeproj/xcshareddata/
