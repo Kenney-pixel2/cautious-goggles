@@ -114,4 +114,14 @@ final class OnThisDayTests: XCTestCase {
         XCTAssertEqual(event.links[0].text, "Valid")
         XCTAssertEqual(event.links[1].text, "Also Valid")
     }
+    
+    func testEventSplitsYearAndDescription() throws {
+        let decoder = JSONDecoder()
+        let day = try decoder.decode(Day.self, from: testData)
+        
+        let firstEvent = try XCTUnwrap(day.events.first)
+        
+        XCTAssertEqual(firstEvent.year, "888")
+        XCTAssertEqual(firstEvent.description, "Odo, count of Paris, is crowned king of West Francia (France) by Archbishop Walter of Sens at Compiègne.")
+    }
 }

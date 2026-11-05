@@ -12,12 +12,36 @@ struct Event: Decodable {
     let text: String
     let links: [Link]
 
+    var year: String? {
+        let components = text.components(separatedBy: "–")
+        guard components.count >= 2 else { return nil }
+        let potentialYear = components[0].trimmingCharacters(in: .whitespaces)
+        
+        if !potentialYear.isEmpty {
+            return potentialYear
+        }
+        return nil
+    }
+    
+    var description: String {
+        let components = text.components(separatedBy: "–")
+        
+        // If there's no dash, just return the whole text
+        guard components.count >= 2 else { return text }
+        
+        // Join the remaining components back together in case the description
+        // itself contained a dash.
+        let desc = components.dropFirst().joined(separator: "–")
+        return desc.trimmingCharacters(in: .whitespaces)
+    }
+    
     private enum CodingKeys: String, CodingKey {
         case text, links
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
         self.text = try container.decode(String.self, forKey: .text)
 
         var linksContainer = try container.nestedUnkeyedContainer(forKey: .links)
